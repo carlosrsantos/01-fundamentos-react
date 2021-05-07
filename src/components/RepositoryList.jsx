@@ -1,37 +1,34 @@
-const repositoryName = 'unform2';
+import { useState, useEffect } from 'react';
+import { RepositoryItem } from "./RepositoryItem";
+
+import "../styles/repositories.scss";
+
+const repository = {
+  name: 'unform',
+  description: 'Forms in React',
+  link: 'https://github.com/unform/unform'
+}
 
 export function RepositoryList() {
+
+  const [repositories, setRepositories] = useState([]);
+
+  useEffect(() => {
+    fetch('https://api.github.com/users/carlosrsantos/repos')
+    .then(response => response.json())
+    .then(data => setRepositories(data))
+  },[]);
+
+
   return (
-    <section>
+    <section className="repository-list">
       <h1>Lista de repositórios</h1>
 
       <ul>
-        <li>
-          <strong>{repositoryName}</strong>
-          <p>Forms in React</p>
-
-          <a href="">
-            Acessar repositórios
-          </a>
-        </li>
-
-        <li>
-          <strong>{repositoryName}</strong>
-          <p>Forms in React</p>
-
-          <a href="">
-            Acessar repositórios
-          </a>
-        </li>
-
-        <li>
-          <strong>{repositoryName}</strong>
-          <p>Forms in React</p>
-
-          <a href="">
-            Acessar repositórios
-          </a>
-        </li>
+        {repositories.map(repository => { //todo primeiro item deve ter um KEY, exigido pelo MAP
+          return <RepositoryItem key={repository.name} repository={repository} />
+        })}        
+       
       </ul>
     </section>
   );
